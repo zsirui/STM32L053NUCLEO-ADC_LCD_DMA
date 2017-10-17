@@ -48,7 +48,7 @@
 /* USER CODE END Includes */
 
 /* Private variables ---------------------------------------------------------*/
-__IO uint16_t ADC_ConvertedValue = 0;
+__IO uint16_t ADC_ConvertedValue[] = {0, 0, 0, 0};
 /* USER CODE BEGIN PV */
 /* Private variables ---------------------------------------------------------*/
 
@@ -105,7 +105,7 @@ int main(void)
   while (1)
   {
   /* USER CODE END WHILE */
-	LCD_GLASS_Heartbeat(((float)ADC_ConvertedValue / 4096) * 3.32);
+	LCD_GLASS_Heartbeat(((float)ADC_ConvertedValue[0] / 4096) * 3.220);
   /* USER CODE BEGIN 3 */
 
   }
@@ -115,7 +115,10 @@ int main(void)
 
 void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc)
 {
-	ADC_ConvertedValue = ADC_ConvertedValue & 0xfff;
+    for(int i = 0; i < 4; i++)
+    {
+        ADC_ConvertedValue[i] = ADC_ConvertedValue[i] & 0xfff;
+    }
 } 
 
 /** System Clock Configuration
