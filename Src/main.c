@@ -105,8 +105,7 @@ int main(void)
   while (1)
   {
   /* USER CODE END WHILE */
-	HAL_Delay(150);
-	LCD_GLASS_DisplayFloat(((float)ADC_ConvertedValue / 4096) * 3.32);
+	LCD_GLASS_Heartbeat(((float)ADC_ConvertedValue / 4096) * 3.32);
   /* USER CODE BEGIN 3 */
 
   }
