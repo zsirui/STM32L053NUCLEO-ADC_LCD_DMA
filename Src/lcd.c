@@ -139,19 +139,19 @@ void LCD_GLASS_BlinkConfig(void)
 
 void LCD_GLASS_Heartbeat(float src)
 {
-	if((src >= -1.999) && (src <= 9.999))
+	if((src >= 0) && (src <= 9.999))
 	{
 		WriteFloat(src, Mode_0);
-	}else if(((src >= -19.99) && (src < -1.999)) || ((src > 9.999) && (src <= 99.99)))
+	} else if(((src >= -19.99) && (src < 0)) || ((src > 9.999) && (src <= 99.99)))
 	{
 		WriteFloat(src, Mode_1);
-	}else if(((src >= -199.9) && (src < -19.99)) || ((src > 99.99) && (src <= 999.9)))
+	} else if(((src >= -199.9) && (src < -19.99)) || ((src > 99.99) && (src <= 999.9)))
 	{
 		WriteFloat(src, Mode_2);
-	}else if(((src >= -1999) && (src < -199.9)) || ((src > 999.9) && (src <= 9999)))
+	} else if(((src >= -1999) && (src < -199.9)) || ((src > 999.9) && (src <= 9999)))
 	{
 		WriteFloat(src, Mode_3);
-	}else
+	} else
 	{
 		WriteFloat(src, Mode_Err);
 	}
@@ -223,7 +223,7 @@ static void WriteFloat(float src, Mode_Typedef Mode)
     uint32_t data = 0x00;
     char ch[10];
     int i, j = 0;
-	if(Mode == Mode_0)						//((src >= -1.999) && (src <= 9.999))
+	if(Mode == Mode_0)						//((src >= 0) && (src <= 9.999))
 	{
         sprintf(ch, "%5.3f", fastAbs(src));
         for(i = 0; i < strlen(ch); i++)
@@ -233,12 +233,19 @@ static void WriteFloat(float src, Mode_Typedef Mode)
 				if (i == 0)
 				{
 					Convert((uint8_t)ch[i], POINT_OFF, MINUS_ON);
+				} else if(ch[i] == '.')
+				{
+					Convert((uint8_t)ch[i + 1], POINT_ON, MINUS_OFF);
+					i += 1;
+				} else
+				{
+					Convert((uint8_t)ch[i], POINT_OFF, MINUS_OFF);
 				}
-			}else if(ch[i] == '.')
+			} else if(ch[i] == '.')
             {
                 Convert((uint8_t)ch[i + 1], POINT_ON, MINUS_OFF);
                 i += 1;
-            }else
+            } else
             {
                 Convert((uint8_t)ch[i], POINT_OFF, MINUS_OFF);
             }
@@ -246,7 +253,7 @@ static void WriteFloat(float src, Mode_Typedef Mode)
             DigitData[j + 1] = Digit[1];
             j += 2;
         }
-	}else if(Mode == Mode_1)					//(((src >= -19.99) && (src < -1.999)) || ((src > 9.999) && (src <= 99.99)))
+	} else if(Mode == Mode_1)					//(((src >= -19.99) && (src < 0)) || ((src > 9.999) && (src <= 99.99)))
 	{
 		sprintf(ch, "%5.2f", fastAbs(src));
         for(i = 0; i < strlen(ch); i++)
@@ -256,12 +263,19 @@ static void WriteFloat(float src, Mode_Typedef Mode)
 				if (i == 0)
 				{
 					Convert((uint8_t)ch[i], POINT_OFF, MINUS_ON);
+				} else if(ch[i] == '.')
+				{
+					Convert((uint8_t)ch[i + 1], POINT_ON, MINUS_OFF);
+					i += 1;
+				} else
+				{
+					Convert((uint8_t)ch[i], POINT_OFF, MINUS_OFF);
 				}
-			}else if(ch[i] == '.')
+			} else if(ch[i] == '.')
             {
                 Convert((uint8_t)ch[i + 1], POINT_ON, MINUS_OFF);
                 i += 1;
-            }else
+            } else
             {
                 Convert((uint8_t)ch[i], POINT_OFF, MINUS_OFF);
             }
@@ -269,7 +283,7 @@ static void WriteFloat(float src, Mode_Typedef Mode)
             DigitData[j + 1] = Digit[1];
             j += 2;
         }
-	}else if(Mode == Mode_2)					//(((src >= -199.9) && (src < -19.99)) || ((src > 99.99) && (src <= 999.9)))
+	} else if(Mode == Mode_2)					//(((src >= -199.9) && (src < -19.99)) || ((src > 99.99) && (src <= 999.9)))
 	{
 		sprintf(ch, "%5.1f", fastAbs(src));
         for(i = 0; i < strlen(ch); i++)
@@ -279,12 +293,19 @@ static void WriteFloat(float src, Mode_Typedef Mode)
 				if (i == 0)
 				{
 					Convert((uint8_t)ch[i], POINT_OFF, MINUS_ON);
+				} else if(ch[i] == '.')
+				{
+					Convert((uint8_t)ch[i + 1], POINT_ON, MINUS_OFF);
+					i += 1;
+				} else
+				{
+					Convert((uint8_t)ch[i], POINT_OFF, MINUS_OFF);
 				}
-			}else if(ch[i] == '.')
+			} else if(ch[i] == '.')
             {
                 Convert((uint8_t)ch[i + 1], POINT_ON, MINUS_OFF);
                 i += 1;
-            }else
+            } else
             {
                 Convert((uint8_t)ch[i], POINT_OFF, MINUS_OFF);
             }
@@ -292,7 +313,7 @@ static void WriteFloat(float src, Mode_Typedef Mode)
             DigitData[j + 1] = Digit[1];
             j += 2;
         }
-	}else if(Mode == Mode_3)					//(((src >= -1999) && (src < -199.9)) || ((src > 999.9) && (src <= 9999)))
+	} else if(Mode == Mode_3)					//(((src >= -1999) && (src < -199.9)) || ((src > 999.9) && (src <= 9999)))
 	{
 		sprintf(ch, "%4.0f", fastAbs(src));
         for(i = 0; i < strlen(ch); i++)
@@ -302,12 +323,19 @@ static void WriteFloat(float src, Mode_Typedef Mode)
 				if (i == 0)
 				{
 					Convert((uint8_t)ch[i], POINT_OFF, MINUS_ON);
+				} else if(ch[i] == '.')
+				{
+					Convert((uint8_t)ch[i + 1], POINT_ON, MINUS_OFF);
+					i += 1;
+				} else
+				{
+					Convert((uint8_t)ch[i], POINT_OFF, MINUS_OFF);
 				}
-			}else if(ch[i] == '.')
+			} else if(ch[i] == '.')
             {
                 Convert((uint8_t)ch[i + 1], POINT_ON, MINUS_OFF);
                 i += 1;
-            }else
+            } else
             {
                 Convert((uint8_t)ch[i], POINT_OFF, MINUS_OFF);
             }
@@ -405,7 +433,7 @@ void HAL_LCD_MspInit(LCD_HandleTypeDef* lcdHandle)
     PC7     ------> LCD_SEG25
     PA8     ------> LCD_COM0
     PA9     ------> LCD_COM1
-    PA10     ------> LCD_COM2
+    PA10    ------> LCD_COM2
     PB9     ------> LCD_COM3 
     */
     GPIO_InitStruct.Pin = GPIO_PIN_0|GPIO_PIN_1|GPIO_PIN_2|GPIO_PIN_3 
@@ -458,7 +486,7 @@ void HAL_LCD_MspDeInit(LCD_HandleTypeDef* lcdHandle)
     PC7     ------> LCD_SEG25
     PA8     ------> LCD_COM0
     PA9     ------> LCD_COM1
-    PA10     ------> LCD_COM2
+    PA10    ------> LCD_COM2
     PB9     ------> LCD_COM3 
     */
     HAL_GPIO_DeInit(GPIOC, GPIO_PIN_0|GPIO_PIN_1|GPIO_PIN_2|GPIO_PIN_3 
